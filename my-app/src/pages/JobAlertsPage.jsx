@@ -131,6 +131,10 @@ function JobAlertsPage() {
         }
     };
 
+    const handleClosePopup = () => {
+        setSubmissionStatus('idle');
+    };
+
     return (
         <section id="get-alerts" className="py-20 sm:py-32 bg-white relative overflow-hidden">
             <div className="container mx-auto px-4 relative z-10">
@@ -228,31 +232,58 @@ function JobAlertsPage() {
                         >
                             {submissionStatus === 'submitting' ? 'Saving...' : 'Save & Get Daily Alerts'}
                         </button>
-                        <AnimatePresence>
-                            {submissionStatus === 'success' && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: -10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -10 }}
-                                    className="mt-4 text-center p-3 rounded-lg bg-green-100 text-green-800 text-sm"
-                                >
-                                    In 5 minutes you will get the details in mail.
-                                </motion.div>
-                            )}
-                            {submissionStatus === 'error' && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: -10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -10 }}
-                                    className="mt-4 text-center p-3 rounded-lg bg-red-100 text-red-800 text-sm"
-                                >
-                                    Submission failed. This is likely a CORS issue. Please ensure your webhook endpoint allows requests from this origin.
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
                     </div>
                 </motion.div>
             </div>
+            <AnimatePresence>
+                {submissionStatus === 'success' && (
+                    <motion.div
+                        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <motion.div
+                            className="relative bg-white rounded-2xl border border-slate-200 shadow-xl p-6 md:p-8 max-w-md mx-4"
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            transition={{ duration: 0.3, ease: "easeOut" }}
+                        >
+                            <button
+                                onClick={handleClosePopup}
+                                className="absolute top-4 right-4 text-slate-600 hover:text-slate-900"
+                                title="Close"
+                            >
+                                <XIcon className="w-6 h-6" />
+                            </button>
+                            <div className="text-center">
+                                <h3 className="text-2xl font-bold text-slate-900 mb-4">🎉 You’re All Set!</h3>
+                                <p className="text-slate-600 mb-6">
+                                    We’re processing your data. Check your inbox in 3–5 minutes for your tailored job updates. From now on, you’ll receive fresh updates every morning.
+                                </p>
+                                <button
+                                    onClick={handleClosePopup}
+                                    className="w-full text-white font-semibold py-2 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 transition-all duration-300 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+                {submissionStatus === 'error' && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="mt-4 text-center p-3 rounded-lg bg-red-100 text-red-800 text-sm max-w-2xl mx-auto"
+                    >
+                        Submission failed. This is likely a CORS issue. Please ensure your webhook endpoint allows requests from this origin.
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </section>
     );
 }
