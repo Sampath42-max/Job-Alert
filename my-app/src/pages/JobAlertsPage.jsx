@@ -56,7 +56,6 @@ function CustomSelect({ items, placeholder, selected, setSelected, isMulti = fal
 
 function JobAlertsPage() {
     const [selectedSkills, setSelectedSkills] = useState([]);
-    const [customSkills, setCustomSkills] = useState('');
     const [jobTitle, setJobTitle] = useState('');
     const [experience, setExperience] = useState('');
     const [interests, setInterests] = useState([]);
@@ -86,16 +85,11 @@ function JobAlertsPage() {
             }
         }
 
-        const allSkills = [
-            ...selectedSkills,
-            ...(customSkills.trim() ? customSkills.split(',').map(s => s.trim()).filter(s => s) : [])
-        ].join(', ');
-
         const dataToSend = {
             email: email,
             resumeFileName: resume ? resume.name : "",
             resumeFileData: resumeFileData,
-            skills: allSkills,
+            skills: selectedSkills.join(', '),
             jobTitle: jobTitle,
             experienceLevel: experience,
             interests: interests.join(', ')
@@ -113,7 +107,6 @@ function JobAlertsPage() {
                 setSubmissionStatus('success');
                 setEmail('');
                 setSelectedSkills([]);
-                setCustomSkills('');
                 setJobTitle('');
                 setExperience('');
                 setInterests([]);
@@ -191,23 +184,13 @@ function JobAlertsPage() {
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Skills (Select from list)</label>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">Skills</label>
                             <CustomSelect
                                 items={SKILLS_DATA}
                                 placeholder="Select your skills..."
                                 selected={selectedSkills}
                                 setSelected={setSelectedSkills}
                                 isMulti={true}
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Custom Skills (Enter additional skills, comma-separated)</label>
-                            <input
-                                type="text"
-                                placeholder="Enter additional skills (e.g., C++, TensorFlow)"
-                                value={customSkills}
-                                onChange={(e) => setCustomSkills(e.target.value)}
-                                className="w-full p-3 bg-white border border-slate-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all duration-300"
                             />
                         </div>
                         <div>
@@ -274,6 +257,4 @@ function JobAlertsPage() {
     );
 }
 
-
 export default JobAlertsPage;
-
