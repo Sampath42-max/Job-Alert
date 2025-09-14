@@ -101,7 +101,7 @@ function JobAlertsPage() {
             interests: interests.join(', ')
         };
 
-        const webhookUrl = 'https://mrtheone007.app.n8n.cloud/webhook-test/inputfields';
+        const webhookUrl = 'https://mrtheone007.app.n8n.cloud/webhook/inputfields';
         try {
             const response = await fetch(webhookUrl, {
                 method: 'POST',
@@ -273,5 +273,6 @@ function JobAlertsPage() {
         </section>
     );
 }
+
 
 export default JobAlertsPage;
