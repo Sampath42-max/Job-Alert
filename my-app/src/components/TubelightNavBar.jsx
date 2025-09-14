@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import HomeIcon from './icons/HomeIcon.jsx';
 import InfoIcon from './icons/InfoIcon.jsx';
@@ -9,6 +9,8 @@ import MailIcon from './icons/MailIcon.jsx';
 function TubelightNavBar({ activeSection }) {
     const location = useLocation();
     const navigate = useNavigate();
+    const [scrollToSection, setScrollToSection] = useState(null);
+
     const navItems = [
         { name: 'Home', url: '/', section: 'home', icon: HomeIcon },
         { name: 'How It Works', url: '/#how-it-works', section: 'how-it-works', icon: InfoIcon },
@@ -17,33 +19,40 @@ function TubelightNavBar({ activeSection }) {
     ];
 
     const handleNavClick = (url, section) => {
-        const isCurrentPage = location.pathname === '/' && location.hash === `#${section}`;
         if (url === '/get-alerts') {
             navigate(url);
         } else {
             navigate(url);
-            // Delay scroll to ensure DOM is rendered
+            setScrollToSection(section);
+        }
+    };
+
+    useEffect(() => {
+        if (scrollToSection && location.pathname === '/') {
             setTimeout(() => {
-                const element = document.getElementById(section);
+                const element = document.getElementById(scrollToSection);
                 if (element) {
                     const yOffset = -80; // Adjust for fixed navbar
                     const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
                     window.scrollTo({ top: y, behavior: 'smooth' });
                 }
+                setScrollToSection(null); // Clear after scrolling
             }, 100);
         }
-    };
+    }, [location, scrollToSection]);
 
-    // Handle hash navigation on page load or hash change
+    // Handle initial hash navigation
     useEffect(() => {
         if (location.pathname === '/' && location.hash) {
-            const section = location.hash.replace('#', '');
-            const element = document.getElementById(section);
-            if (element) {
-                const yOffset = -80;
-                const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-                window.scrollTo({ top: y, behavior: 'smooth' });
-            }
+            setTimeout(() => {
+                const section = location.hash.replace('#', '');
+                const element = document.getElementById(section);
+                if (element) {
+                    const yOffset = -80;
+                    const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                }
+            }, 100);
         }
     }, [location]);
 
