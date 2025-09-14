@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // Ensure this import is included
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import EnhancedBackground from './icons/background/EnhancedBackground';
 
@@ -8,9 +8,9 @@ function HeroSection() {
     const words = title.split(" ");
 
     return (
-        <section id="home" className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+        <section id="home" className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-white">
             <EnhancedBackground />
-            <div className="absolute inset-0 bg-gradient-to-t from-white/60 via-transparent to-white/60 dark:from-slate-900/60 dark:via-transparent dark:to-slate-900/60" />
+            <div className="absolute inset-0 bg-gradient-to-t from-white/60 via-transparent to-white/60" />
             <div className="relative z-10 container mx-auto px-4 text-center">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -28,7 +28,7 @@ function HeroSection() {
                                         animate={{ y: 0, opacity: 1, rotateX: 0 }}
                                         transition={{ delay: wordIndex * 0.15 + letterIndex * 0.05, type: "spring", stiffness: 100, damping: 20, duration: 0.8 }}
                                         whileHover={{ scale: 1.05, y: -2 }}
-                                        className="inline-block text-transparent bg-clip-text bg-gradient-to-br from-slate-900 via-slate-700 to-slate-500 dark:from-white dark:via-slate-200 dark:to-slate-400 hover:from-blue-600 hover:to-purple-600 dark:hover:from-blue-400 dark:hover:to-purple-400 transition-all duration-700 cursor-default"
+                                        className="inline-block text-transparent bg-clip-text bg-gradient-to-br from-slate-900 via-slate-700 to-slate-500 hover:from-blue-600 hover:to-purple-600 transition-all duration-700 cursor-default"
                                     >
                                         {letter}
                                     </motion.span>
@@ -40,7 +40,7 @@ function HeroSection() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 1, duration: 1 }}
-                        className="text-lg md:text-xl text-slate-600 dark:text-slate-300 font-light tracking-wide max-w-2xl mx-auto"
+                        className="text-lg md:text-xl text-slate-600 font-light tracking-wide max-w-2xl mx-auto"
                     >
                         Get daily job updates tailored to your skills and interests, delivered straight to your inbox.
                     </motion.p>
@@ -51,7 +51,7 @@ function HeroSection() {
                         className="inline-block group mt-10"
                     >
                         <Link to="/get-alerts" className="relative p-[2px] bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-2xl group-hover:from-blue-600 group-hover:via-purple-600 group-hover:to-pink-600 transition-all duration-300 block">
-                            <span className="relative block rounded-[14px] px-10 py-5 text-lg font-semibold bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-900 dark:text-white transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-2xl border-0">
+                            <span className="relative block rounded-[14px] px-10 py-5 text-lg font-semibold bg-white hover:bg-slate-50 text-slate-900 transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-2xl border-0">
                                 <motion.span
                                     className="flex items-center gap-3"
                                     whileHover={{ x: 2 }}

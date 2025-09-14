@@ -1,60 +1,39 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import CheckCircleIcon from './icons/CheckCircleIcon';
-import XCircleIcon from './icons/XCircleIcon';
 
 function WhyUsSection() {
-    const problems = [
-        "Hours wasted scrolling through irrelevant job listings.",
-        "Missing out on perfect opportunities buried in noise.",
-        "Generic job alerts that don't match your skills.",
-        "Overwhelming amount of unfiltered information."
-    ];
-    const solutions = [
-        "Curated daily job alerts based on your profile.",
-        "Al-powered matching with your skills and interests.",
-        "Quality over quantity - only relevant opportunities.",
-        "Delivered straight to your inbox daily."
+    const features = [
+        { title: 'Personalized Alerts', description: 'Jobs tailored to your unique skills and preferences.' },
+        { title: 'AI-Driven Insights', description: 'Advanced algorithms ensure the best job matches.' },
+        { title: 'Daily Updates', description: 'Fresh opportunities delivered to your inbox every day.' },
     ];
 
     return (
-        <section id="why-us" className="py-20 sm:py-32 bg-white dark:bg-slate-900">
+        <section id="why-us" className="py-24 bg-white">
             <div className="container mx-auto px-4">
-                <div className="text-center mb-16 max-w-3xl mx-auto">
-                    <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 dark:text-white">Stop Wasting Time on Job Searches</h2>
-                    <p className="mt-4 text-lg text-slate-600 dark:text-slate-400">Tired of endless scrolling? We deliver only the opportunities that match your skills and interests.</p>
-                </div>
-                <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                    <motion.div
-                        className="p-8 bg-slate-50 dark:bg-slate-800/30 rounded-2xl border border-red-200 dark:border-red-500/20"
-                        initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
-                        transition={{ duration: 0.7 }}
-                    >
-                        <h3 className="text-2xl font-bold text-red-600 dark:text-red-400 mb-6">The Problem</h3>
-                        <ul className="space-y-4">
-                            {problems.map((problem, i) => (
-                                <li key={i} className="flex items-start">
-                                    <XCircleIcon className="w-5 h-5 text-red-500 mr-3 mt-1 flex-shrink-0" />
-                                    <span className="text-slate-700 dark:text-slate-300">{problem}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </motion.div>
-                    <motion.div
-                        className="p-8 bg-slate-50 dark:bg-slate-800/30 rounded-2xl border border-blue-200 dark:border-blue-500/20"
-                        initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
-                        transition={{ duration: 0.7 }}
-                    >
-                        <h3 className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-6">Our Solution</h3>
-                        <ul className="space-y-4">
-                            {solutions.map((solution, i) => (
-                                <li key={i} className="flex items-start">
-                                    <CheckCircleIcon className="w-5 h-5 text-blue-500 mr-3 mt-1 flex-shrink-0" />
-                                    <span className="text-slate-700 dark:text-slate-300">{solution}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </motion.div>
+                <motion.h2
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8 }}
+                    className="text-4xl md:text-5xl font-bold text-center mb-16 text-slate-900"
+                >
+                    Why Choose Us
+                </motion.h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {features.map((feature, index) => (
+                        <motion.div
+                            key={index}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5, delay: index * 0.2 }}
+                            className="p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"
+                        >
+                            <h3 className="text-xl font-semibold mb-2 text-slate-800">{feature.title}</h3>
+                            <p className="text-slate-600">{feature.description}</p>
+                        </motion.div>
+                    ))}
                 </div>
             </div>
         </section>

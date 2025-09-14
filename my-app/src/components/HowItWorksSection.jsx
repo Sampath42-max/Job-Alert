@@ -1,33 +1,43 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import UploadCloudIcon from './icons/UploadCloudIcon.jsx';
+import TargetIcon from './icons/TargetIcon.jsx';
+import CheckCircleIcon from './icons/CheckCircleIcon.jsx';
 
 function HowItWorksSection() {
     const steps = [
-        { icon: '📄', title: 'Upload Your Resume', description: 'Let our Al parse your experience and skills to kickstart your profile.' },
-        { icon: '⚙️', title: 'Set what matters to you.', description: 'Fine-tune your job search with specific skills, roles, and interests.' },
-        { icon: '📧', title: 'Get Daily Alerts', description: 'Receive a curated list of the best job openings directly in your inbox.' }
+        { icon: UploadCloudIcon, title: 'Submit Your Details', description: 'Provide your skills, experience, and job preferences in a quick form.' },
+        { icon: TargetIcon, title: 'AI-Powered Matching', description: 'Our AI matches you with jobs that fit your profile and goals.' },
+        { icon: CheckCircleIcon, title: 'Get Daily Alerts', description: 'Receive curated job opportunities directly in your inbox every day.' },
     ];
 
     return (
-        <section id="how-it-works" className="py-20 sm:py-32 bg-slate-50 dark:bg-slate-900/70">
+        <section id="how-it-works" className="py-24 bg-white">
             <div className="container mx-auto px-4">
-                <div className="text-center mb-16">
-                    <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 dark:text-white">How It Works</h2>
-                    <p className="mt-4 text-lg text-slate-600 dark:text-slate-400">Three simple steps to land your dream job.</p>
-                </div>
-                <div className="grid md:grid-cols-3 gap-8 md:gap-12">
+                <motion.h2
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8 }}
+                    className="text-4xl md:text-5xl font-bold text-center mb-16 text-slate-900"
+                >
+                    How It Works
+                </motion.h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {steps.map((step, index) => (
                         <motion.div
-                            key={step.title}
-                            className="text-center p-8 bg-white dark:bg-slate-800/50 rounded-2xl shadow-lg border border-slate-200/50 dark:border-slate-700/50"
-                            initial={{ opacity: 0, y: 50 }}
+                            key={index}
+                            initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.5, delay: index * 0.2 }}
+                            className="flex flex-col items-center text-center p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"
                         >
-                            <div className="text-5xl mb-4">{step.icon}</div>
-                            <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">{step.title}</h3>
-                            <p className="text-slate-600 dark:text-slate-400">{step.description}</p>
+                            <div className="mb-4 text-blue-500">
+                                <step.icon className="w-12 h-12" />
+                            </div>
+                            <h3 className="text-xl font-semibold mb-2 text-slate-800">{step.title}</h3>
+                            <p className="text-slate-600">{step.description}</p>
                         </motion.div>
                     ))}
                 </div>

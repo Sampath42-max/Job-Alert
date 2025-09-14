@@ -1,39 +1,71 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom'; // Added useLocation
+import React, { useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import HomeIcon from './icons/HomeIcon';
-import InfoIcon from './icons/InfoIcon';
-import TargetIcon from './icons/TargetIcon';
-import MailIcon from './icons/MailIcon';
+import HomeIcon from './icons/HomeIcon.jsx';
+import InfoIcon from './icons/InfoIcon.jsx';
+import TargetIcon from './icons/TargetIcon.jsx';
+import MailIcon from './icons/MailIcon.jsx';
 
 function TubelightNavBar({ activeSection }) {
-    const location = useLocation(); // Get current route
+    const location = useLocation();
+    const navigate = useNavigate();
     const navItems = [
-        { name: 'Home', url: '/', icon: HomeIcon },
-        { name: 'How It Works', url: '/#how-it-works', icon: InfoIcon },
-        { name: 'Why Us', url: '/#why-us', icon: TargetIcon },
-        { name: 'Get Alerts', url: '/get-alerts', icon: MailIcon }
+        { name: 'Home', url: '/', section: 'home', icon: HomeIcon },
+        { name: 'How It Works', url: '/#how-it-works', section: 'how-it-works', icon: InfoIcon },
+        { name: 'Why Us', url: '/#why-us', section: 'why-us', icon: TargetIcon },
+        { name: 'Get Alerts', url: '/get-alerts', section: 'get-alerts', icon: MailIcon }
     ];
+
+    const handleNavClick = (url, section) => {
+        const isCurrentPage = location.pathname === '/' && location.hash === `#${section}`;
+        if (url === '/get-alerts') {
+            navigate(url);
+        } else {
+            navigate(url);
+            // Delay scroll to ensure DOM is rendered
+            setTimeout(() => {
+                const element = document.getElementById(section);
+                if (element) {
+                    const yOffset = -80; // Adjust for fixed navbar
+                    const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                }
+            }, 100);
+        }
+    };
+
+    // Handle hash navigation on page load or hash change
+    useEffect(() => {
+        if (location.pathname === '/' && location.hash) {
+            const section = location.hash.replace('#', '');
+            const element = document.getElementById(section);
+            if (element) {
+                const yOffset = -80;
+                const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                window.scrollTo({ top: y, behavior: 'smooth' });
+            }
+        }
+    }, [location]);
 
     return (
         <header className="fixed top-0 left-1/2 -translate-x-1/2 z-50 pt-6">
-            <nav className="flex items-center gap-2 bg-white/60 dark:bg-slate-900/60 border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-lg px-4 py-1 rounded-full shadow-lg">
+            <nav className="flex items-center gap-2 bg-white border border-slate-200 px-4 py-1 rounded-full shadow-md">
                 {navItems.map((item) => {
                     const Icon = item.icon;
                     const isActive = (item.url === '/get-alerts' && location.pathname === '/get-alerts') ||
-                                    (item.url !== '/get-alerts' && activeSection === (item.url.split('#')[1] || 'home'));
+                                    (item.section && activeSection === item.section);
                     return (
-                        <Link
+                        <div
                             key={item.name}
-                            to={item.url}
-                            className={`relative cursor-pointer text-sm font-semibold px-4 py-2 md:px-6 rounded-full transition-colors text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white ${isActive ? 'text-slate-900 dark:text-white' : ''}`}
+                            onClick={() => handleNavClick(item.url, item.section)}
+                            className={`relative cursor-pointer text-sm font-semibold px-4 py-2 md:px-6 rounded-full transition-colors text-slate-600 hover:text-slate-900 ${isActive ? 'text-slate-900' : ''}`}
                         >
                             <span className="hidden md:inline">{item.name}</span>
                             <span className="md:hidden"><Icon className="w-5 h-5" /></span>
                             {isActive && (
                                 <motion.div
                                     layoutId="lamp"
-                                    className="absolute inset-0 w-full bg-slate-200/50 dark:bg-slate-800/50 rounded-full -z-10"
+                                    className="absolute inset-0 w-full bg-slate-100 rounded-full -z-10"
                                     initial={false}
                                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                                 >
@@ -43,7 +75,7 @@ function TubelightNavBar({ activeSection }) {
                                     </div>
                                 </motion.div>
                             )}
-                        </Link>
+                        </div>
                     );
                 })}
             </nav>
