@@ -72,7 +72,22 @@ function JobAlertsPage() {
             reader.onerror = (error) => reject(error);
         });
 
+    const validateForm = () => {
+        return (
+            email.trim() !== '' &&
+            selectedSkills.length > 0 &&
+            jobTitle.trim() !== '' &&
+            experience.trim() !== '' &&
+            interests.length > 0
+        );
+    };
+
     const handleSubmit = async () => {
+        if (!validateForm()) {
+            setSubmissionStatus('validation-error');
+            return;
+        }
+
         setSubmissionStatus('submitting');
         let resumeFileData = "";
         if (resume) {
@@ -117,6 +132,9 @@ function JobAlertsPage() {
             } else {
                 setSubmissionStatus('error');
                 console.error("Webhook submission failed:", response.status, response.statusText);
+                if (response.status === 404) {
+                    console.error("Webhook endpoint not found.");
+                }
             }
         } catch (error) {
             setSubmissionStatus('error');
@@ -178,7 +196,9 @@ function JobAlertsPage() {
                             )}
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">
+                                Email <span className="text-red-500">*</span>
+                            </label>
                             <input
                                 type="email"
                                 placeholder="Enter your email..."
@@ -188,7 +208,9 @@ function JobAlertsPage() {
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Skills</label>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">
+                                Skills <span className="text-red-500">*</span>
+                            </label>
                             <CustomSelect
                                 items={SKILLS_DATA}
                                 placeholder="Select your skills..."
@@ -198,7 +220,9 @@ function JobAlertsPage() {
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Job Title</label>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">
+                                Job Title <span className="text-red-500">*</span>
+                            </label>
                             <CustomSelect
                                 items={JOB_TITLES_DATA}
                                 placeholder="Select a job title..."
@@ -207,7 +231,9 @@ function JobAlertsPage() {
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Experience</label>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">
+                                Experience <span className="text-red-500">*</span>
+                            </label>
                             <CustomSelect
                                 items={EXPERIENCE_DATA}
                                 placeholder="Select experience level..."
@@ -216,7 +242,9 @@ function JobAlertsPage() {
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Interests</label>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">
+                                Interests <span className="text-red-500">*</span>
+                            </label>
                             <CustomSelect
                                 items={INTERESTS_DATA}
                                 placeholder="Select your interests..."
@@ -273,14 +301,78 @@ function JobAlertsPage() {
                         </motion.div>
                     </motion.div>
                 )}
+                {submissionStatus === 'validation-error' && (
+                    <motion.div
+                        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <motion.div
+                            className="relative bg-white rounded-2xl border border-slate-200 shadow-xl p-6 md:p-8 max-w-md mx-4"
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            transition={{ duration: 0.3, ease: "easeOut" }}
+                        >
+                            <button
+                                onClick={handleClosePopup}
+                                className="absolute top-4 right-4 text-slate-600 hover:text-slate-900"
+                                title="Close"
+                            >
+                                <XIcon className="w-6 h-6" />
+                            </button>
+                            <div className="text-center">
+                                <h3 className="text-2xl font-bold text-slate-900 mb-4">Missing Information</h3>
+                                <p className="text-slate-600 mb-6">
+                                    Please fill all required fields.
+                                </p>
+                                <button
+                                    onClick={handleClosePopup}
+                                    className="w-full text-white font-semibold py-2 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 transition-all duration-300 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
                 {submissionStatus === 'error' && (
                     <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        className="mt-4 text-center p-3 rounded-lg bg-red-100 text-red-800 text-sm max-w-2xl mx-auto"
+                        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3 }}
                     >
-                        Submission failed. This is likely a CORS issue. Please ensure your webhook endpoint allows requests from this origin.
+                        <motion.div
+                            className="relative bg-white rounded-2xl border border-slate-200 shadow-xl p-6 md:p-8 max-w-md mx-4"
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            transition={{ duration: 0.3, ease: "easeOut" }}
+                        >
+                            <button
+                                onClick={handleClosePopup}
+                                className="absolute top-4 right-4 text-slate-600 hover:text-slate-900"
+                                title="Close"
+                            >
+                                <XIcon className="w-6 h-6" />
+                            </button>
+                            <div className="text-center">
+                                <h3 className="text-2xl font-bold text-slate-900 mb-4">Submission Failed</h3>
+                                <p className="text-slate-600 mb-6">
+                                    Submission failed. This is likely a CORS issue. Please ensure your webhook endpoint allows requests from this origin.
+                                </p>
+                                <button
+                                    onClick={handleClosePopup}
+                                    className="w-full text-white font-semibold py-2 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 transition-all duration-300 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        </motion.div>
                     </motion.div>
                 )}
             </AnimatePresence>
